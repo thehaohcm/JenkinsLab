@@ -1,24 +1,41 @@
 package main
 
 import (
-	"fmt"
-	"log"
 	"net/http"
-)
+	"os"
 
-func init() {
-
-}
-
-var (
-	ServiceName = "golang-docker-demo"
-	port        = "8100"
+	"github.com/labstack/echo/v4"
+	"github.com/labstack/echo/v4/middleware"
 )
 
 func main() {
-	http.HandleFunc("/ping", func(w http.ResponseWriter, req *http.Request) {
-		w.Write([]byte(fmt.Sprintf("ping ok %s", ServiceName)))
+
+	e := echo.New()
+
+	e.Use(middleware.Logger())
+	e.Use(middleware.Recover())
+
+	e.GET("/", func(c echo.Context) error {
+		return c.HTML(http.StatusOK, "Hello, Docker! <3")
 	})
-	fmt.Println("start service with port: ", port)
-	log.Fatal(http.ListenAndServe(fmt.Sprintf(":%s", port), nil))
+
+	e.GET("/health", func(c echo.Context) error {
+		return c.JSON(http.StatusOK, struct{ Status string }{Status: "OK"})
+	})
+
+	httpPort := os.Getenv("PORT")
+	if httpPort == "" {
+		httpPort = "8080"
+	}
+
+	e.Logger.Fatal(e.Start(":" + httpPort))
+}
+
+// Simple implementation of an integer minimum
+// Adapted from: https://gobyexample.com/testing-and-benchmarking
+func IntMin(a, b int) int {
+	if a < b {
+		return a
+	}
+	return b
 }
