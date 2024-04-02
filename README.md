@@ -1,12 +1,30 @@
 Init and run the Jenkins by docker:
-# sudo docker compose up -d
+
+```# sudo docker compose up -d```
 
 If you encounter a "permission denied" error, run the following command:
-# chmod 777 -R /var/jenkins_home
+
+```# chmod 777 -R /var/jenkins_home```
+
 And then run the 1st cmd again
 
 
-Jenkinsfile DSL:
+Jenkins DSL Example:
+```
+job('DSL-Example') {
+    scm {
+        git('https://github.com/thehaohcm/JenkinsLab.git')
+    }
+    triggers {
+        scm('H/15 * * * *')
+    }
+    steps {
+        golangProject('...')
+    }
+}
+```
+
+Jenkinsfile Pipeline Example:
 ```
 def build() {
   sh '[cmd_1]'
@@ -31,6 +49,12 @@ pipeline {
       steps {
         deploy()
       }
+    }
+  }
+
+  post{
+    success{
+      echo "Cool :)"
     }
   }
 }
