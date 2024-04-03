@@ -9,6 +9,10 @@ WORKDIR /app
 COPY go.mod go.sum ./
 RUN go mod download
 
+# Update packages
+RUN go mod tidy
+RUN go get -u
+
 # Copy the source code. Note the slash at the end, as explained in
 # https://docs.docker.com/reference/dockerfile/#copy
 COPY *.go ./
