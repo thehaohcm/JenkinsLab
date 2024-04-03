@@ -3,7 +3,7 @@ pipeline{
   stages{
     stage('Test & Build'){
       steps{
-        sh 'docker build –t thehaohcm/jenkinslab:latest -f project/Dockerfile .'
+        sh 'docker build -f project/Dockerfile -t thehaohcm/jenkinslab:latest ./project/'
         sh 'docker image push thehaohcm/jenkinslab:latest'
       }
    }
