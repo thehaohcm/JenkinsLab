@@ -16,7 +16,7 @@ func main() {
 	e.Use(middleware.Recover())
 
 	e.GET("/", func(c echo.Context) error {
-		return c.HTML(http.StatusOK, "Hello, Docker! <3. This is a test API")
+		return c.HTML(http.StatusOK, "Hello, Docker! <3.")
 	})
 
 	e.GET("/health", func(c echo.Context) error {
@@ -29,13 +29,4 @@ func main() {
 	}
 
 	e.Logger.Fatal(e.Start(":" + httpPort))
-}
-
-// Simple implementation of an integer minimum
-// Adapted from: https://gobyexample.com/testing-and-benchmarking
-func IntMin(a, b int) int {
-	if a < b {
-		return a
-	}
-	return b
 }
