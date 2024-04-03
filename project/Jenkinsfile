@@ -3,18 +3,30 @@ pipeline{
   stages{
     stage('Test & Build'){
       steps{
+        // build image
         sh 'docker build -f project/Dockerfile -t thehaohcm/jenkinslab:latest ./project/'
+
+        // push image
         sh 'docker image push thehaohcm/jenkinslab:latest'
       }
    }
    stage('Deploy'){
+      // pull image
       steps{
         sh 'docker image pull thehaohcm/jenkinslab:latest'
+      }
+      
+      // stop an existing container
+      steps{
         sh '''
           if [ "$( docker container inspect -f '{{.State.Running}}' docker-gs-ping )" = "true" ]; then
             docker stop docker-gs-ping
           fi
-           '''
+          '''
+      }
+
+      // start a container
+      steps{
         sh 'docker run -d --rm --name docker-gs-ping -p 8081:8080 thehaohcm/jenkinslab:latest'
       }
     }
