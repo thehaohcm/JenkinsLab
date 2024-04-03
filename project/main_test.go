@@ -1,13 +1,10 @@
 package main_test
 
 import (
-	"bytes"
-	"io"
 	"net/http"
 	"net/http/httptest"
 	"os"
 	"testing"
-
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
 )
