@@ -1,23 +1,16 @@
-def build(){
-  sh ‘docker build –t .’
-  sh ‘docker push’
-}
-def deploy{
-  sh ‘docker pull’
-  sh ‘docker run -t ‘
-}
-
 pipeline{
   agent any
   stages{
     stage(‘Build’){
       steps{
-        build()
+        sh ‘docker build –t .’
+        sh ‘docker push’
       }
    }
    stage(‘Build’){
       steps{
-        build()
+        sh ‘docker pull’
+        sh ‘docker run -t ‘
       }
     }
   }
