@@ -7,11 +7,10 @@ WORKDIR /app
 
 # Download Go modules
 COPY go.mod go.sum ./
-RUN go mod download
 
 # Update packages
 RUN go mod tidy
-RUN go get -u
+RUN GO111MODULE=on go get github.com/labstack/echo/v4 github.com/labstack/echo/v4/middleware
 
 # Copy the source code. Note the slash at the end, as explained in
 # https://docs.docker.com/reference/dockerfile/#copy
