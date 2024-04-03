@@ -1,28 +1,25 @@
-node {
-   def commit_id
-   stage('Preparation') {
-     checkout scm
-     sh "git rev-parse --short HEAD > .git/commit-id"                        
-     commit_id = readFile('.git/commit-id').trim()
-     tag = 'latest'
-   }
-   stage('test') {
-     go(goJSInstallationName: 'go') {
-       sh 'go test'
-     }
-   }
-   stage('docker build/push') {
-     docker.withRegistry('https://index.docker.io/v2/', 'dockerhub') {
-       //def app = docker.build("thehaohcm/jenkinslab:${commit_id}", '.').push()
-       def app = docker.build("thehaohcm/jenkinslab:${tag}", '.').push()
-     }
-   }
-   stage('Run on local'){
-     sh(returnStdout: true, script: '''#!/bin/bash
-       if [ "$( docker container inspect -f '{{.State.Running}}' 'docker-gs-ping' )" = "true" ]; then
-       docker stop docker-gs-ping
-       fi
-       docker run -d --rm --name docker-gs-ping -p 8081:8080 thehaohcm/jenkinslab:${tag}
-     '''.stripIndent())
-   }
+def build(){
+  sh ‘docker build –t .’
+  sh ‘docker push’
 }
+def deploy{
+  sh ‘docker pull’
+  sh ‘docker run -t ‘
+}
+
+pipeline{
+  agent any
+  stages{
+    stage(‘Build’){
+      steps{
+        build()
+      }
+   }
+   stage(‘Build’){
+      steps{
+        build()
+      }
+    }
+  }
+}
+
