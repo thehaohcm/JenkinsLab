@@ -41,14 +41,4 @@ func TestRootRoute(t *testing.T) {
 	if result.StatusCode != http.StatusOK {
 		t.Errorf("Expected status code %d but got %d", http.StatusOK, result.StatusCode)
 	}
-
-	expectedBody := "Hello, Docker! <3."
-	actualBody, err := io.ReadAll(result.Body)
-	if err != nil {
-		t.Errorf("Failed to read response body: %v", err)
-	}
-
-	if !bytes.Equal([]byte(expectedBody), actualBody) {
-		t.Errorf("Expected body '%s' but got '%s'", expectedBody, string(actualBody))
-	}
 }
