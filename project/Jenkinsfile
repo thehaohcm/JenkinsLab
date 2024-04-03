@@ -1,9 +1,9 @@
 pipeline{
   agent any
   stages{
-    stage('Build'){
+    stage('Test & Build'){
       steps{
-        sh 'docker build -f Dockerfile –t thehaohcm/jenkinslab:latest ./project/'
+        sh 'docker build –t thehaohcm/jenkinslab:latest -f project/Dockerfile .'
         sh 'docker image push thehaohcm/jenkinslab:latest'
       }
    }
