@@ -14,7 +14,7 @@ RUN go mod download
 COPY *.go ./
 
 # Test
-RUN go test main
+RUN go test
 
 # Build
 RUN CGO_ENABLED=0 GOOS=linux go build -o /docker-gs-ping
