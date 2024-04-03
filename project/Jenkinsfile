@@ -1,18 +1,17 @@
 pipeline{
   agent any
   stages{
-    stage(‘Build’){
+    stage('Build'){
       steps{
-        sh ‘docker build –t .’
-        sh ‘docker push’
+        sh 'docker build –t thehaohcm/jenkinslab:latest .'
+        sh 'docker image push thehaohcm/jenkinslab:latest'
       }
    }
-   stage(‘Build’){
+   stage('Deploy'){
       steps{
-        sh ‘docker pull’
-        sh ‘docker run -t ‘
+        sh 'docker image pull thehaohcm/jenkinslab:latest'
+        sh 'docker run -d --rm --name docker-gs-ping -p 8081:8080 thehaohcm/jenkinslab:latest'
       }
     }
   }
 }
-
