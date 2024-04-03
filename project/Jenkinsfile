@@ -10,6 +10,11 @@ pipeline{
    stage('Deploy'){
       steps{
         sh 'docker image pull thehaohcm/jenkinslab:latest'
+        sh '''
+          if [ "$( docker container inspect -f '{{.State.Running}}' docker-gs-ping )" = "true" ]; then
+            docker stop docker-gs-ping
+          fi
+           '''
         sh 'docker run -d --rm --name docker-gs-ping -p 8081:8080 thehaohcm/jenkinslab:latest'
       }
     }
