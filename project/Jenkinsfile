@@ -1,8 +1,19 @@
 pipeline{
   agent any
   stages{
+    stage('Checkout SCM'){
+      steps {
+         git(
+           url: "https://github.com/thehaohcm/JenkinsLab.git",
+           branch: "master"
+         )
+      }
+    }
     stage('Test & Build'){
       steps{
+        // send slack
+        slackSend color: "#439FE0", message: "Build Started"
+
         // build image
         sh 'docker build -f project/Dockerfile -t thehaohcm/docker-gs-ping:latest ./project/'
 
@@ -25,6 +36,16 @@ pipeline{
       // start a container
         sh 'docker run -d --rm --name docker-gs-ping -p 8081:8080 thehaohcm/docker-gs-ping:latest'
       }
+    }
+  }
+
+  // post action
+  post {
+    success {
+      slackSend color: "#43E053", message: "Build deployed successfully"
+    }
+    failure {
+      slackSend failOnError: true, color: "#EB1005", message: "Build failed"
     }
   }
 }
