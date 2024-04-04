@@ -4,16 +4,16 @@ pipeline{
     stage('Test & Build'){
       steps{
         // build image
-        sh 'docker build -f project/Dockerfile -t thehaohcm/jenkinslab:latest ./project/'
+        sh 'docker build -f project/Dockerfile -t thehaohcm/docker-gs-ping:latest ./project/'
 
         // push image
-        sh 'docker image push thehaohcm/jenkinslab:latest'
+        sh 'docker image push thehaohcm/docker-gs-ping:latest'
       }
     }
     stage('Deploy'){
       // pull image
       steps{
-        sh 'docker image pull thehaohcm/jenkinslab:latest'
+        sh 'docker image pull thehaohcm/docker-gs-ping:latest'
 
       // stop an existing container
         sh '''
@@ -23,8 +23,9 @@ pipeline{
           '''
 
       // start a container
-        sh 'docker run -d --rm --name docker-gs-ping -p 8081:8080 thehaohcm/jenkinslab:latest'
+        sh 'docker run -d --rm --name docker-gs-ping -p 8081:8080 thehaohcm/docker-gs-ping:latest'
       }
     }
   }
 }
+
