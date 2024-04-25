@@ -26,28 +26,35 @@ job('DSL-Example') {
 
 Jenkinsfile Pipeline Example:
 ```
-def build() {
-  sh '[cmd_1]'
-  sh '[cmd_2]'
-}
-
-def deploy() {
-  sh '[cmd_1]'
-  sh '[cmd_2]'
-}
-
 pipeline {
   agent any
 
   stages {
     stage('Build') {
       steps {
-        build()
+        // send slack
+        slackSend color: "#439FE0", message: "Build Started"
+
+        // build image
+        sh 'docker build -f project/Dockerfile -t thehaohcm/docker-gs-ping:latest ./project/'
+
+        // push image
+        sh 'docker image push thehaohcm/docker-gs-ping:latest'
       }
     }
     stage('Deploy') {
       steps {
-        deploy()
+        sh 'docker image pull thehaohcm/docker-gs-ping:latest'
+
+      // stop an existing container
+        sh '''
+          if [ "$( docker container inspect -f '{{.State.Running}}' docker-gs-ping )" = "true" ]; then
+            docker stop docker-gs-ping
+          fi
+          '''
+
+      // start a container
+        sh 'docker run -d --rm --name docker-gs-ping -p 8081:8080 thehaohcm/docker-gs-ping:latest'
       }
     }
   }
