@@ -1,12 +1,19 @@
 Install docker in linux distro: https://docs.docker.com/engine/install/ubuntu/
 
-Install k3d and create a local kubernetes cluster in Linux:
+Install k3s and create a local kubernetes cluster in Linux:
 ```
-# curl -s https://raw.githubusercontent.com/k3d-io/k3d/main/install.sh | bash
+# curl -sfL https://get.k3s.io | sh -
 k3d cluster create demo-cluster
 ```
 
-Init and run the Jenkins by docker:
+Install Helm and Postgres (run on port 31432) (OPTIONAL):
+```
+# curl https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3 | bash
+# helm install stockvn-db bitnami/postgresql --set service.type=NodePort --set service.nodePort=31432 --set auth.postgresPassword=[YOUR_PASSWORD] --set primary.service.ports.postgresql=5432
+# kubectl patch svc stockvn-db-postgresql -p '{"spec": {"type": "NodePort", "ports": [{"port": 5432, "targetPort": 5432, "nodePort": 31432}]}}'
+```
+
+Init and run the Jenkins container:
 
 ```# sudo docker compose up -d```
 
