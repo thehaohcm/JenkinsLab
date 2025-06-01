@@ -1,3 +1,11 @@
+Install docker in linux distro: https://docs.docker.com/engine/install/ubuntu/
+
+Install k3d and create a local kubernetes cluster in Linux:
+```
+# curl -s https://raw.githubusercontent.com/k3d-io/k3d/main/install.sh | bash
+k3d cluster create demo-cluster
+```
+
 Init and run the Jenkins by docker:
 
 ```# sudo docker compose up -d```
