@@ -66,7 +66,10 @@ pipeline {
 
   post{
     success{
-      echo "Cool :)"
+      slackSend color: "#43E053", message: "Build deployed successfully"
+    }
+    failure{
+      slackSend failOnError: true, color: "#EB1005", message: "Build failed"
     }
   }
 }
